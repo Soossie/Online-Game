@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f499640516d9c49a4807f0c542a16b6e, type: 3}
+  m_Name: LoginPathSO
+  m_EditorClassIdentifier: Assembly-CSharp::SceneManagement.ScenePathSO
+  path: Assets/Scenes/10_Login.unity
+  sceneAsset: {fileID: 102900000, guid: bc08a58ffd04841e5b64074c9dcb8411, type: 3}
