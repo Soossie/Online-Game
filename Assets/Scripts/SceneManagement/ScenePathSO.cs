@@ -4,7 +4,7 @@ using UnityEditor;
 #endif
 namespace SceneManagement
 {
-    [CreateAssetMenu(fileName = "ScenePathSO", menuName = "ScriptableObjects/ScenePathSO")]
+    [CreateAssetMenu(fileName = "ScenePathSO", menuName = "Verkkopeli/ScenePathSO")]
     public sealed class ScenePathSO : ScriptableObject
     {
         // Makes path readonly outside this script

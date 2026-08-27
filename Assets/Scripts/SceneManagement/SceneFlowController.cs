@@ -37,6 +37,7 @@ namespace SceneManagement
             if (_isTransitioning)
                 return;
             _isTransitioning = true;
+            Debug.Log("Changing primary scene");
             StartCoroutine(ChangePrimarySceneCoroutine(pathSO));
         }
 
