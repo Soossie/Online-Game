@@ -12,9 +12,9 @@ namespace Application
     {
         [SerializeField] private SceneFlowController sceneFlowController;
         [SerializeField] private LoadingScreenController loadingScreenController;
-        [SerializeField] private ScenePathSO _mainMenuSceneSO;
-        [SerializeField] private ScenePathSO _loginSceneSO;
-        [SerializeField] private NetworkSettingsSO _settingsSo;
+        [SerializeField] private ScenePathSO mainMenuSceneSo;
+        [SerializeField] private ScenePathSO loginSceneSo;
+        [SerializeField] private NetworkSettingsSO settingsSo;
 
         private GameApp _app;
 
@@ -26,17 +26,17 @@ namespace Application
             if (!loadingScreenController)
                 throw new ArgumentNullException(nameof(loadingScreenController));
             
-            if (!_mainMenuSceneSO)
-                throw new ArgumentNullException(nameof(_mainMenuSceneSO));
+            if (!mainMenuSceneSo)
+                throw new ArgumentNullException(nameof(mainMenuSceneSo));
             
-            if (!_loginSceneSO)
-                throw new ArgumentNullException(nameof(_loginSceneSO));
+            if (!loginSceneSo)
+                throw new ArgumentNullException(nameof(loginSceneSo));
             
             string authPath = Path.Combine(
                 UnityEngine.Application.persistentDataPath, 
                 AppConstants.Authentication.DataPath);
             
-            NodeClient nodeClient = new(_settingsSo.BaseUrl);
+            NodeClient nodeClient = new(settingsSo.BaseUrl);
 
             IAuthenticationClient authClient = nodeClient;
             IPlayerProfileClient profileClient = nodeClient;
@@ -49,7 +49,7 @@ namespace Application
                 .Add(new SceneLoader())
                 .Add(sceneFlowController)
                 .Add(loadingScreenController)
-                .Add(new StartupScenes(menuSO: _mainMenuSceneSO, loginSO: _loginSceneSO))
+                .Add(new StartupScenes(menuSO: mainMenuSceneSo, loginSO: loginSceneSo))
                 .Add(authClient)
                 .Add(profileClient)
                 .Add(authSessionStore)

@@ -53,7 +53,7 @@ namespace Netcode
         {
             LoginRequestDto dto = new()
             {
-                email = email,
+                email = email,  
                 password = password,
                 staySignedIn = stayLoggedIn
             };
@@ -84,32 +84,46 @@ namespace Netcode
         
         public async Task<AuthenticationResult> RefreshAsync(AccessToken refreshToken, CancellationToken ctx)
         {
-            using UnityWebRequest request = UnityWebRequest.Get(_baseUrl + AppConstants.Api.RefreshEndpoint);
-            request.SetRequestHeader("X-Refresh-Token", refreshToken.Value);
+            if (refreshToken.Value is null)
+                throw new ArgumentNullException(nameof(refreshToken));
+            
+            using UnityWebRequest request = new(
+                _baseUrl + AppConstants.Api.RefreshEndpoint, 
+                UnityWebRequest.kHttpVerbPOST);
+            request.downloadHandler = new DownloadHandlerBuffer();
             request.certificateHandler = new BypassCertificateHandler();
+            request.SetRequestHeader("X-Refresh-Token", refreshToken.Value);
+            
+            
             await SendAsync(request, ctx);
-
-            //TODO add redirect to login page
-            if (request.responseCode == (long)HttpStatusCode.Unauthorized)
+            
+            Debug.Log($"Request response code: {request.responseCode}");
+            
+            switch (request.responseCode)
             {
-                throw new UnauthorizedAccessException("Authentication rejected");
+                //TODO add redirect to login page
+                case (long)HttpStatusCode.Unauthorized:
+                    throw new UnauthorizedAccessException("Authentication rejected");
+                case (long)HttpStatusCode.BadRequest:
+                    throw new UnauthorizedAccessException("Bad request");
             }
-
+            
             if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log(request.result);
+                Debug.LogError($"Request failed ({request.responseCode}): {request.error}");
                 throw new InvalidOperationException($"Request failed ({request.responseCode}): {request.error}");
             }
             
             RefreshResponseDto responseDto = JsonUtility.FromJson<RefreshResponseDto>(request.downloadHandler.text);
-            return new AuthenticationResult(new AccessToken(responseDto.accessToken), refreshToken);
+            Debug.Log(responseDto.refreshToken);
+            return new AuthenticationResult(
+                new AccessToken(responseDto.accessToken), 
+                new AccessToken(responseDto.refreshToken));
         }
         
         private static async Task SendAsync(UnityWebRequest request, CancellationToken ctx)
         {
             UnityWebRequestAsyncOperation operation = request.SendWebRequest();
-            
-            
             while (!operation.isDone)
             {
                 if (ctx.IsCancellationRequested)

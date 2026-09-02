@@ -8,8 +8,10 @@ namespace Netcode.Authentication
 
         public AccessToken(string tokenString)
         {
+            /*
             if (string.IsNullOrWhiteSpace(tokenString))
                 throw new ArgumentException(nameof(tokenString));
+                */
 
             Value = tokenString;
         }

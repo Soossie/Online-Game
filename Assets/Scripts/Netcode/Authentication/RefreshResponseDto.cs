@@ -6,5 +6,6 @@ namespace Netcode.Authentication
     public sealed class RefreshResponseDto
     {
         public string accessToken;
+        public string refreshToken;
     }
 }

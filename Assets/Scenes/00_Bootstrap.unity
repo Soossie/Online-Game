@@ -641,9 +641,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Application.BootStrapCompositionRoot
   sceneFlowController: {fileID: 1710256979}
   loadingScreenController: {fileID: 1764325483}
-  _mainMenuSceneSO: {fileID: 11400000, guid: 6de722088120940d8954e1c836c697ea, type: 2}
-  _loginSceneSO: {fileID: 11400000, guid: f3124ffd43ad64ad3b0738f44089c17e, type: 2}
-  _settingsSo: {fileID: 11400000, guid: fe35590472f74457395434c5ce765f4c, type: 2}
+  mainMenuSceneSo: {fileID: 11400000, guid: 6de722088120940d8954e1c836c697ea, type: 2}
+  loginSceneSo: {fileID: 11400000, guid: f3124ffd43ad64ad3b0738f44089c17e, type: 2}
+  settingsSo: {fileID: 11400000, guid: fe35590472f74457395434c5ce765f4c, type: 2}
 --- !u!1 &1103852758
 GameObject:
   m_ObjectHideFlags: 0

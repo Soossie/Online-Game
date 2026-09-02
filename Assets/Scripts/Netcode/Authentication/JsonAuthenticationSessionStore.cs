@@ -46,8 +46,6 @@ namespace Netcode.Authentication
                 Debug.LogWarning("Loaded authentication session without refresh token");
             else
                 Debug.Log("Loaded authentication session");
-            Debug.Log("Returning with " + dto.accessToken + " and " + dto.refreshToken);
-            //TODO here breaks
             return new AuthenticationResult(new AccessToken(dto.accessToken), new AccessToken(dto.refreshToken));
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Contracts.Netcode;
 using Contracts.SceneControl;
 using SceneManagement;
@@ -34,7 +35,6 @@ namespace Features.Login
             {
                 statusText.color = Color.papayaWhip;
                 statusText.text = "Logging in...";
-                Debug.Log("Email: " + emailInputField.text + " Password: " + passwordInputField.text);
                 await _authenticationService.LoginAsync(
                     emailInputField.text,
                     passwordInputField.text, stayLoggedInToggle.isOn,
@@ -43,6 +43,7 @@ namespace Features.Login
                 destroyCancellationToken.ThrowIfCancellationRequested();
                 statusText.color = Color.green;
                 statusText.text = "Logged in";
+                await Task.Delay(1000);
                 _sceneFlowController.ChangePrimaryScene(nextSceneSo);
             }
             catch (Exception exception)

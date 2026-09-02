@@ -39,13 +39,14 @@ namespace Application
             Debug.Log("Starting game app");
             _hasStarted = true;
             bool sessionRestored = await _authService.TryRestoreSessionASync(ctx);
+            if (sessionRestored)
+                Debug.Log("Session restored successfully");
             ctx.ThrowIfCancellationRequested();
             ScenePathSO startScene = sessionRestored 
                 ? _startupScenes.MainMenuSO
                 : _startupScenes.LoginSceneSO;
             Debug.Log("Starting scene: " + startScene.name);
             _sceneFlowController.ChangePrimaryScene(startScene);
-            
         }
     }
 }

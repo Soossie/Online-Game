@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 864440c02366436a9ae69ff7994b5bc7, type: 3}
   m_Name: NetworkSettingsSO
   m_EditorClassIdentifier: Assembly-CSharp::Netcode.NetworkSettingsSO
-  _baseUrl: https://localhost:3001
+  baseUrl: https://localhost:3001/

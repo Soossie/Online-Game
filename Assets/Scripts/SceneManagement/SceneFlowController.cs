@@ -34,8 +34,10 @@ namespace SceneManagement
         // Change primary scene and unload secondary scenes
         public void ChangePrimaryScene(ScenePathSO pathSO)
         {
+            Debug.Log("starting to change primary scene");
             if (_isTransitioning)
                 return;
+            
             _isTransitioning = true;
             Debug.Log("Changing primary scene");
             StartCoroutine(ChangePrimarySceneCoroutine(pathSO));
@@ -116,6 +118,7 @@ namespace SceneManagement
             }
             
             // Loading done
+            _isTransitioning = false;
             ProgressChanged?.Invoke(1f);
             TransitionCompleted?.Invoke();
         }

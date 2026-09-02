@@ -48,8 +48,7 @@ namespace Netcode.Authentication
             _currentAuth = null;
             _profileSession.ClearCurrentProfile();
         }
-
-        //TODO refresh token restore
+        
         public async Task<bool> TryRestoreSessionASync(CancellationToken ctx)
         {
             Debug.Log("Got here");
@@ -64,11 +63,11 @@ namespace Netcode.Authentication
             try
             {
                 Debug.Log("Trying to restore session");
-                PlayerProfile profile = await _profileClient.GetMyProfileAsync(storedAuth.Value.AccessToken, ctx);
+                PlayerProfile profile = await _profileClient.GetMyProfileAsync(new AccessToken(), ctx); //TODO
                 ctx.ThrowIfCancellationRequested();
                 _currentAuth = storedAuth.Value;
                 _profileSession.SetCurrentProfile(profile);
-                Debug.Log("Got here");
+                Debug.Log("Access token valid");
                 return true;
             }
             catch (OperationCanceledException)
@@ -78,12 +77,35 @@ namespace Netcode.Authentication
             catch (UnauthorizedAccessException)
             {
                 Debug.Log("Access token expired, refreshing...");
+                if (!string.IsNullOrEmpty(storedAuth.Value.RefreshToken.Value))
+                {
+                    try
+                    {
+                        AuthenticationResult auth = await _refreshAuth.RefreshAsync(storedAuth.Value.RefreshToken, ctx);
+                        await _authSessionStore.SaveAsync(auth, ctx);
+                        _currentAuth = auth;
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                        Debug.LogError("Failed to refresh access token, login again");
+                        await _authSessionStore.ClearAsync(ctx);
+                        _currentAuth = null;
+                        _profileSession.ClearCurrentProfile();
+                        return false;
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Failed to refresh access token, login again");
+                    await _authSessionStore.ClearAsync(ctx);
+                    _currentAuth = null;
+                    _profileSession.ClearCurrentProfile();
+                    return false;
+                }
                 
-                AuthenticationResult auth = await _refreshAuth.RefreshAsync(storedAuth.Value.RefreshToken, ctx);
-                await _authSessionStore.SaveAsync(auth, ctx);
                 ctx.ThrowIfCancellationRequested();
-                _currentAuth = auth;
-
+                
                 if (!string.IsNullOrEmpty(_currentAuth.Value.AccessToken.Value))
                 {
                     // Got a new access token, try logging again
